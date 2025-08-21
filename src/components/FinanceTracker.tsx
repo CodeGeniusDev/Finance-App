@@ -88,7 +88,7 @@ export const FinanceTracker: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-gray-600">Total Balance</p>
               <p className={`text-2xl font-bold ${summary.balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ${summary.balance.toLocaleString()}
+              Rs. {summary.balance.toLocaleString()}
               </p>
             </div>
             <DollarSign className={`w-8 h-8 ${summary.balance >= 0 ? 'text-green-600' : 'text-red-600'}`} />
@@ -100,7 +100,7 @@ export const FinanceTracker: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-gray-600">Monthly Income</p>
               <p className="text-2xl font-bold text-green-600">
-                ${summary.monthlyIncome.toLocaleString()}
+              Rs. {summary.monthlyIncome.toLocaleString()}
               </p>
             </div>
             <TrendingUp className="w-8 h-8 text-green-600" />
@@ -112,7 +112,7 @@ export const FinanceTracker: React.FC = () => {
             <div>
               <p className="text-sm font-medium text-gray-600">Monthly Expenses</p>
               <p className="text-2xl font-bold text-red-600">
-                ${summary.monthlyExpenses.toLocaleString()}
+              Rs. {summary.monthlyExpenses.toLocaleString()}
               </p>
             </div>
             <TrendingDown className="w-8 h-8 text-red-600" />

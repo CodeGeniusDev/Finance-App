@@ -80,7 +80,7 @@ export const FinanceCharts: React.FC<FinanceChartsProps> = ({ entries }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />
             <YAxis />
-            <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, '']} />
+            <Tooltip formatter={(value: number) => [`Rs. ${value.toLocaleString()}`, '']} />
             <Legend />
             <Line 
               type="monotone" 
@@ -128,7 +128,7 @@ export const FinanceCharts: React.FC<FinanceChartsProps> = ({ entries }) => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, 'Amount']} />
+                <Tooltip formatter={(value: number) => [`Rs. ${value.toLocaleString()}`, 'Amount']} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -154,7 +154,7 @@ export const FinanceCharts: React.FC<FinanceChartsProps> = ({ entries }) => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value: number) => [`$${value.toLocaleString()}`, 'Amount']} />
+                <Tooltip formatter={(value: number) => [`Rs. ${value.toLocaleString()}`, 'Amount']} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -177,7 +177,7 @@ export const FinanceCharts: React.FC<FinanceChartsProps> = ({ entries }) => {
             <YAxis />
             <Tooltip 
               formatter={(value: number) => [
-                `$${Math.abs(value).toLocaleString()}`, 
+                `Rs. ${Math.abs(value).toLocaleString()}`, 
                 value >= 0 ? 'Income' : 'Expense'
               ]} 
             />

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { FinanceEntry } from '../types/Finance';
-import { Edit3, Trash2, Search, Filter, TrendingUp, TrendingDown } from 'lucide-react';
+import { Edit3, Trash2, Search, TrendingUp, TrendingDown } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface FinanceListProps {
@@ -109,7 +109,7 @@ export const FinanceList: React.FC<FinanceListProps> = ({
                       <span className={`font-bold text-lg ${
                         entry.type === 'income' ? 'text-green-600' : 'text-red-600'
                       }`}>
-                        {entry.type === 'income' ? '+' : '-'}${entry.amount.toLocaleString()}
+                        {entry.type === 'income' ? '+' : '-'}Rs. {entry.amount.toLocaleString()}
                       </span>
                     </div>
                     

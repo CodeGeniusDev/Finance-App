@@ -25,13 +25,13 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({ entries }) => {
             <div className="flex justify-between items-center">
               <span className="text-green-700">All Time:</span>
               <span className="text-2xl font-bold text-green-800">
-                ${summary.totalIncome.toLocaleString()}
+              Rs. {summary.totalIncome.toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-green-700">This Month:</span>
               <span className="text-xl font-semibold text-green-800">
-                ${summary.monthlyIncome.toLocaleString()}
+              Rs. {summary.monthlyIncome.toLocaleString()}
               </span>
             </div>
           </div>
@@ -46,13 +46,13 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({ entries }) => {
             <div className="flex justify-between items-center">
               <span className="text-red-700">All Time:</span>
               <span className="text-2xl font-bold text-red-800">
-                ${summary.totalExpenses.toLocaleString()}
+              Rs. {summary.totalExpenses.toLocaleString()}
               </span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-red-700">This Month:</span>
               <span className="text-xl font-semibold text-red-800">
-                ${summary.monthlyExpenses.toLocaleString()}
+              Rs. {summary.monthlyExpenses.toLocaleString()}
               </span>
             </div>
           </div>
@@ -72,24 +72,24 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({ entries }) => {
           Net Balance
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between gap-2 items-center">
             <span className={summary.balance >= 0 ? 'text-blue-700' : 'text-orange-700'}>
               All Time:
             </span>
-            <span className={`text-3xl font-bold ${
+            <span className={`text-2xl font-bold ${
               summary.balance >= 0 ? 'text-blue-800' : 'text-orange-800'
             }`}>
-              ${summary.balance.toLocaleString()}
+              Rs. {summary.balance.toLocaleString()}
             </span>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between gap-2 items-center">
             <span className={summary.monthlyBalance >= 0 ? 'text-blue-700' : 'text-orange-700'}>
               This Month:
             </span>
             <span className={`text-2xl font-semibold ${
               summary.monthlyBalance >= 0 ? 'text-blue-800' : 'text-orange-800'
             }`}>
-              ${summary.monthlyBalance.toLocaleString()}
+              Rs. {summary.monthlyBalance.toLocaleString()}
             </span>
           </div>
         </div>
@@ -113,7 +113,7 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({ entries }) => {
                         {category.category}
                       </span>
                       <span className="text-sm font-semibold text-green-600">
-                        ${category.amount.toLocaleString()}
+                        Rs. {category.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
@@ -145,7 +145,7 @@ export const FinanceSummary: React.FC<FinanceSummaryProps> = ({ entries }) => {
                         {category.category}
                       </span>
                       <span className="text-sm font-semibold text-red-600">
-                        ${category.amount.toLocaleString()}
+                        Rs. {category.amount.toLocaleString()}
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
