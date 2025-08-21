@@ -70,7 +70,7 @@ export const LinkManager: React.FC<LinkManagerProps> = ({
           <button
             onClick={handleAddLink}
             disabled={!newLinkUrl.trim() || isLoading}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-colors"
+            className="px-6 py-3 bg-[#7F6353] text-white rounded-lg hover:bg-[#695346] disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-colors"
           >
             <Plus className="w-5 h-5" />
             <span>{isLoading ? 'Adding...' : 'Add'}</span>

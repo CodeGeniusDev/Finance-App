@@ -6,6 +6,7 @@ import { SearchFilter } from './components/SearchFilter';
 import { Project } from './types/Project';
 import { storageService } from './services/storageService';
 import { Plus, FolderOpen, DollarSign, BarChart3 } from 'lucide-react';
+import Footer from './components/Footer';
 
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -201,6 +202,7 @@ function App() {
           )}
         </main>
       </div>
+        <Footer />
     </div>
   );
 }
