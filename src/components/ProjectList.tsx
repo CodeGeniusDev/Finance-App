@@ -7,15 +7,13 @@ interface ProjectListProps {
   onEdit: (project: Project) => void;
   onDelete: (id: string) => void;
   onDuplicate: (project: Project) => void;
-  onUpdate: (project: Project) => void;
 }
 
 export const ProjectList: React.FC<ProjectListProps> = ({
   projects,
   onEdit,
   onDelete,
-  onDuplicate,
-  onUpdate
+  onDuplicate
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -26,7 +24,6 @@ export const ProjectList: React.FC<ProjectListProps> = ({
           onEdit={() => onEdit(project)}
           onDelete={() => onDelete(project.id)}
           onDuplicate={() => onDuplicate(project)}
-          onUpdate={onUpdate}
         />
       ))}
     </div>

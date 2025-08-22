@@ -25,7 +25,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   const [tagInput, setTagInput] = useState('');
   const [files, setFiles] = useState<ProjectFile[]>([]);
   const [links, setLinks] = useState<ProjectLink[]>([]);
-  const [entries, setEntries] = useState<ProjectEntry[]>([]);
   const [activeTab, setActiveTab] = useState<'details' | 'files' | 'links'>('details');
 
   useEffect(() => {
@@ -39,7 +38,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       setTags(project.tags);
       setFiles(project.files);
       setLinks(project.links);
-      setEntries(project.entries || []);
     }
   }, [project]);
 
@@ -56,8 +54,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       notes: notes.trim(),
       tags,
       files,
-      links,
-      entries
+      links
     });
   };
 

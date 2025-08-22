@@ -16,20 +16,6 @@ export interface ProjectLink {
   addedAt: string;
 }
 
-export interface ProjectEntry {
-  id: string;
-  title: string;
-  description: string;
-  startDate: string;
-  endDate?: string;
-  progress: number; // 0-100
-  cost: number;
-  status: 'planned' | 'in-progress' | 'completed' | 'cancelled';
-  notes: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface Project {
   id: string;
   title: string;
@@ -41,7 +27,6 @@ export interface Project {
   tags: string[];
   files: ProjectFile[];
   links: ProjectLink[];
-  entries: ProjectEntry[];
   createdAt: string;
   updatedAt: string;
 }
