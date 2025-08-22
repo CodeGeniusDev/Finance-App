@@ -17,6 +17,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [clientName, setClientName] = useState('');
+  const [projectType, setProjectType] = useState('');
+  const [status, setStatus] = useState<'planning' | 'in-progress' | 'completed' | 'on-hold' | 'cancelled'>('planning');
+  const [notes, setNotes] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [files, setFiles] = useState<ProjectFile[]>([]);
@@ -27,6 +31,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     if (project) {
       setTitle(project.title);
       setDescription(project.description);
+      setClientName(project.clientName || '');
+      setProjectType(project.projectType || '');
+      setStatus(project.status || 'planning');
+      setNotes(project.notes || '');
       setTags(project.tags);
       setFiles(project.files);
       setLinks(project.links);
@@ -40,6 +48,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     onSave({
       title: title.trim(),
       description: description.trim(),
+      clientName: clientName.trim(),
+      projectType: projectType.trim(),
+      status,
+      notes: notes.trim(),
       tags,
       files,
       links
@@ -147,6 +159,68 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                     rows={4}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent resize-none"
                     placeholder="Describe your project"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-2">
+                      Client Name
+                    </label>
+                    <input
+                      type="text"
+                      id="clientName"
+                      value={clientName}
+                      onChange={(e) => setClientName(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
+                      placeholder="Enter client name"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="projectType" className="block text-sm font-medium text-gray-700 mb-2">
+                      Project Type
+                    </label>
+                    <input
+                      type="text"
+                      id="projectType"
+                      value={projectType}
+                      onChange={(e) => setProjectType(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
+                      placeholder="e.g., Website, Mobile App, Design"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
+                    Status
+                  </label>
+                  <select
+                    id="status"
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as any)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
+                  >
+                    <option value="planning">Planning</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                    <option value="on-hold">On Hold</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-2">
+                    Notes
+                  </label>
+                  <textarea
+                    id="notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent resize-none"
+                    placeholder="Additional notes about this project"
                   />
                 </div>
 

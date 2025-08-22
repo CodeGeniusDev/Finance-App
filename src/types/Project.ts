@@ -20,6 +20,10 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  clientName: string;
+  projectType: string;
+  status: 'planning' | 'in-progress' | 'completed' | 'on-hold' | 'cancelled';
+  notes: string;
   tags: string[];
   files: ProjectFile[];
   links: ProjectLink[];
