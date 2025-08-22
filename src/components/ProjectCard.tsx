@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Project } from '../types/Project';
+import { ProjectEntryForm } from './ProjectEntryForm';
+import { ProjectEntryList } from './ProjectEntryList';
 import { FileManager } from './FileManager';
 import { LinkPreview } from './LinkPreview';
 import { 
@@ -27,15 +29,20 @@ interface ProjectCardProps {
   onEdit: () => void;
   onDelete: () => void;
   onDuplicate: () => void;
+  onUpdate: (updatedProject: Project) => void;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   onEdit,
   onDelete,
-  onDuplicate
+  onDuplicate,
+  onUpdate
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showEntryForm, setShowEntryForm] = useState(false);
+  const [editingEntry, setEditingEntry] = useState<ProjectEntry | null>(null);
+  const [activeTab, setActiveTab] = useState<'files' | 'links' | 'entries'>('entries');
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -72,6 +79,53 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const handleSaveEntry = (entryData: Omit<ProjectEntry, 'id' | 'createdAt' | 'updatedAt'>) => {
+    let updatedEntries;
+    
+    if (editingEntry) {
+      updatedEntries = project.entries.map(e => 
+        e.id === editingEntry.id 
+          ? { ...entryData, id: e.id, createdAt: e.createdAt, updatedAt: new Date().toISOString() }
+          : e
+      );
+    } else {
+      const newEntry: ProjectEntry = {
+        ...entryData,
+        id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      updatedEntries = [...project.entries, newEntry];
+    }
+
+    const updatedProject = {
+      ...project,
+      entries: updatedEntries,
+      updatedAt: new Date().toISOString()
+    };
+
+    onUpdate(updatedProject);
+    setShowEntryForm(false);
+    setEditingEntry(null);
+  };
+
+  const handleEditEntry = (entry: ProjectEntry) => {
+    setEditingEntry(entry);
+    setShowEntryForm(true);
+  };
+
+  const handleDeleteEntry = (entryId: string) => {
+    if (window.confirm('Are you sure you want to delete this entry?')) {
+      const updatedEntries = project.entries.filter(e => e.id !== entryId);
+      const updatedProject = {
+        ...project,
+        entries: updatedEntries,
+        updatedAt: new Date().toISOString()
+      };
+      onUpdate(updatedProject);
     }
   };
 
@@ -182,6 +236,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 {project.links.length}
               </div>
             )}
+            {project.entries && project.entries.length > 0 && (
+              <div className="flex items-center">
+                <Calendar className="w-4 h-4 mr-1" />
+                {project.entries.length}
+              </div>
+            )}
           </div>
         </div>
 
@@ -205,9 +265,73 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         )}
       </div>
 
-      {isExpanded && (project.files.length > 0 || project.links.length > 0) && (
+      {isExpanded && (project.files.length > 0 || project.links.length > 0 || (project.entries && project.entries.length > 0)) && (
         <div className="border-t border-gray-100 p-6 bg-gray-50">
-          {project.files.length > 0 && (
+          {/* Tab Navigation */}
+          <div className="flex space-x-4 mb-4 border-b border-gray-200">
+            {project.entries && project.entries.length > 0 && (
+              <button
+                onClick={() => setActiveTab('entries')}
+                className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === 'entries'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Entries ({project.entries.length})
+              </button>
+            )}
+            {project.files.length > 0 && (
+              <button
+                onClick={() => setActiveTab('files')}
+                className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === 'files'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Files ({project.files.length})
+              </button>
+            )}
+            {project.links.length > 0 && (
+              <button
+                onClick={() => setActiveTab('links')}
+                className={`pb-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === 'links'
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Links ({project.links.length})
+              </button>
+            )}
+          </div>
+
+          {/* Project Entries */}
+          {activeTab === 'entries' && project.entries && (
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h4 className="font-medium text-gray-900 flex items-center">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Project Entries ({project.entries.length})
+                </h4>
+                <button
+                  onClick={() => setShowEntryForm(true)}
+                  className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm flex items-center space-x-1"
+                >
+                  <Plus className="w-3 h-3" />
+                  <span>Add Entry</span>
+                </button>
+              </div>
+              <ProjectEntryList
+                entries={project.entries}
+                onEdit={handleEditEntry}
+                onDelete={handleDeleteEntry}
+              />
+            </div>
+          )}
+
+          {activeTab === 'files' && project.files.length > 0 && (
             <div className="mb-6">
               <h4 className="font-medium text-gray-900 mb-3 flex items-center">
                 <FileText className="w-4 h-4 mr-2" />
@@ -217,7 +341,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
           )}
 
-          {project.links.length > 0 && (
+          {activeTab === 'links' && project.links.length > 0 && (
             <div>
               <h4 className="font-medium text-gray-900 mb-3 flex items-center">
                 <LinkIcon className="w-4 h-4 mr-2" />
@@ -231,6 +355,17 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </div>
           )}
         </div>
+      )}
+
+      {showEntryForm && (
+        <ProjectEntryForm
+          entry={editingEntry}
+          onSave={handleSaveEntry}
+          onCancel={() => {
+            setShowEntryForm(false);
+            setEditingEntry(null);
+          }}
+        />
       )}
     </div>
   );

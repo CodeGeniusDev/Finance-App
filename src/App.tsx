@@ -3,6 +3,7 @@ import { FinanceTracker } from './components/FinanceTracker';
 import { ProjectList } from './components/ProjectList';
 import { ProjectForm } from './components/ProjectForm';
 import { SearchFilter } from './components/SearchFilter';
+import { ProjectCharts } from './components/ProjectCharts';
 import { Project } from './types/Project';
 import { storageService } from './services/storageService';
 import { Plus, FolderOpen, DollarSign, BarChart3 } from 'lucide-react';
@@ -15,7 +16,7 @@ function App() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [activeSection, setActiveSection] = useState<'projects' | 'finance'>('projects');
+  const [activeSection, setActiveSection] = useState<'projects' | 'finance' | 'charts'>('projects');
 
   useEffect(() => {
     const loadedProjects = storageService.loadProjects();
@@ -29,7 +30,8 @@ function App() {
                            project.description.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesTags = selectedTags.length === 0 || 
                          selectedTags.some(tag => project.tags.includes(tag));
-      return matchesSearch && matchesTags;
+      links,
+      entries: []
     });
     setFilteredProjects(filtered);
   }, [projects, searchTerm, selectedTags]);
@@ -85,6 +87,14 @@ function App() {
     storageService.saveProjects(updatedProjects);
   };
 
+  const handleUpdateProject = (updatedProject: Project) => {
+    const updatedProjects = projects.map(p => 
+      p.id === updatedProject.id ? updatedProject : p
+    );
+    setProjects(updatedProjects);
+    storageService.saveProjects(updatedProjects);
+  };
+
   const allTags = Array.from(new Set(projects.flatMap(p => p.tags)));
 
   return (
@@ -121,6 +131,17 @@ function App() {
                   <DollarSign className="w-4 h-4" />
                   <span>Finance</span>
                 </button>
+                <button
+                  onClick={() => setActiveSection('charts')}
+                  className={`px-4 py-2 rounded-md flex items-center space-x-2 transition-colors ${
+                    activeSection === 'charts'
+                      ? 'bg-[#7F6353] text-white shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <BarChart3 className="w-4 h-4" />
+                  <span>Charts</span>
+                </button>
               </div>
               
               {activeSection === 'projects' && (
@@ -148,6 +169,7 @@ function App() {
 
         <main>
           {activeSection === 'finance' && <FinanceTracker />}
+          {activeSection === 'charts' && <ProjectCharts projects={projects} />}
           
           {activeSection === 'projects' && (
             <>
@@ -167,6 +189,7 @@ function App() {
             onEdit={handleEditProject}
             onDelete={handleDeleteProject}
             onDuplicate={handleDuplicateProject}
+            onUpdate={handleUpdateProject}
           />
           
           {filteredProjects.length === 0 && projects.length > 0 && (
