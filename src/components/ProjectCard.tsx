@@ -19,7 +19,9 @@ import {
   AlertCircle,
   StickyNote,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  DollarSign,
+  CalendarDays
 } from 'lucide-react';
 
 interface ProjectCardProps {
@@ -131,6 +133,26 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             <div className="flex items-center text-sm text-gray-600">
               <Briefcase className="w-4 h-4 mr-2 text-gray-400" />
               <span className="truncate">{project.projectType}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Cost and Dates */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          {project.cost && (
+            <div className="flex items-center text-sm text-gray-600">
+              <DollarSign className="w-4 h-4 mr-2 text-gray-400" />
+              <span className="truncate">Rs. {project.cost.toLocaleString()}</span>
+            </div>
+          )}
+          {(project.startDate || project.endDate) && (
+            <div className="flex items-center text-sm text-gray-600">
+              <CalendarDays className="w-4 h-4 mr-2 text-gray-400" />
+              <span className="truncate">
+                {project.startDate && formatDate(project.startDate)}
+                {project.startDate && project.endDate && ' - '}
+                {project.endDate && formatDate(project.endDate)}
+              </span>
             </div>
           )}
         </div>

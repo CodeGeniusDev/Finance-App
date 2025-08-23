@@ -3,9 +3,10 @@ import { FinanceTracker } from './components/FinanceTracker';
 import { ProjectList } from './components/ProjectList';
 import { ProjectForm } from './components/ProjectForm';
 import { SearchFilter } from './components/SearchFilter';
+import { ProjectCharts } from './components/ProjectCharts';
 import { Project } from './types/Project';
 import { storageService } from './services/storageService';
-import { Plus, FolderOpen, DollarSign, BarChart3 } from 'lucide-react';
+import { Plus, FolderOpen, DollarSign, BarChart3, TrendingUp } from 'lucide-react';
 import Footer from './components/Footer';
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [activeSection, setActiveSection] = useState<'projects' | 'finance'>('projects');
+  const [activeSection, setActiveSection] = useState<'projects' | 'charts' | 'finance'>('projects');
 
   useEffect(() => {
     const loadedProjects = storageService.loadProjects();
@@ -111,6 +112,17 @@ function App() {
                   <span>Projects</span>
                 </button>
                 <button
+                  onClick={() => setActiveSection('charts')}
+                  className={`px-4 py-2 rounded-md flex items-center space-x-2 transition-colors ${
+                    activeSection === 'charts'
+                      ? 'bg-[#7F6353] text-white shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <TrendingUp className="w-4 h-4" />
+                  <span>Charts</span>
+                </button>
+                <button
                   onClick={() => setActiveSection('finance')}
                   className={`px-4 py-2 rounded-md flex items-center space-x-2 transition-colors ${
                     activeSection === 'finance'
@@ -123,7 +135,7 @@ function App() {
                 </button>
               </div>
               
-              {activeSection === 'projects' && (
+              {(activeSection === 'projects' || activeSection === 'charts') && (
                 <button
                   onClick={() => setShowForm(true)}
                   className="bg-white border-black border hover:bg-[#695346] hover:text-white text-[#7F6353] px-6 py-3 rounded-lg flex items-center space-x-2 transition-colors duration-200 shadow-lg hover:shadow-xl"
@@ -135,7 +147,7 @@ function App() {
             </div>
           </div>
           
-          {activeSection === 'projects' && (
+          {(activeSection === 'projects' || activeSection === 'charts') && (
             <SearchFilter
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
@@ -148,6 +160,8 @@ function App() {
 
         <main>
           {activeSection === 'finance' && <FinanceTracker />}
+          
+          {activeSection === 'charts' && <ProjectCharts projects={filteredProjects} />}
           
           {activeSection === 'projects' && (
             <>
@@ -184,7 +198,7 @@ function App() {
             </div>
           )}
           
-          {projects.length === 0 && (
+          {projects.length === 0 && activeSection === 'projects' && (
             <div className="text-center py-20">
               <FolderOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-medium text-gray-900 mb-2">No projects yet</h3>

@@ -27,6 +27,9 @@ export interface Project {
   tags: string[];
   files: ProjectFile[];
   links: ProjectLink[];
+  cost?: number;
+  startDate?: string;
+  endDate?: string;
   createdAt: string;
   updatedAt: string;
 }

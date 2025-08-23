@@ -25,6 +25,9 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   const [tagInput, setTagInput] = useState('');
   const [files, setFiles] = useState<ProjectFile[]>([]);
   const [links, setLinks] = useState<ProjectLink[]>([]);
+  const [cost, setCost] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [activeTab, setActiveTab] = useState<'details' | 'files' | 'links'>('details');
 
   useEffect(() => {
@@ -38,6 +41,9 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       setTags(project.tags);
       setFiles(project.files);
       setLinks(project.links);
+      setCost(project.cost?.toString() || '');
+      setStartDate(project.startDate || '');
+      setEndDate(project.endDate || '');
     }
   }, [project]);
 
@@ -54,7 +60,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       notes: notes.trim(),
       tags,
       files,
-      links
+      links,
+      cost: cost ? parseFloat(cost) : undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined
     });
   };
 
@@ -188,6 +197,55 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
                       onChange={(e) => setProjectType(e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
                       placeholder="e.g., Website, Mobile App, Design"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label htmlFor="cost" className="block text-sm font-medium text-gray-700 mb-2">
+                      Project Cost
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span className="text-gray-500 sm:text-sm">Rs.</span>
+                      </div>
+                      <input
+                        type="number"
+                        id="cost"
+                        value={cost}
+                        onChange={(e) => setCost(e.target.value)}
+                        className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
+                      Start Date
+                    </label>
+                    <input
+                      type="date"
+                      id="startDate"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-2">
+                      End Date
+                    </label>
+                    <input
+                      type="date"
+                      id="endDate"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7F6353] focus:border-transparent"
                     />
                   </div>
                 </div>
