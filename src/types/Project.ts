@@ -23,6 +23,12 @@ export interface Project {
   clientName: string;
   projectType: string;
   status: 'planning' | 'in-progress' | 'completed' | 'on-hold' | 'cancelled';
+  paymentStatus?: 'not-applicable' | 'pending' | 'paid' | 'overdue';
+  date?: string;
+  thumbnail?: string;
+  earnings?: number;
+  priorityLevel?: 'Low' | 'Medium' | 'High';
+  attachments?: any[];
   notes: string;
   tags: string[];
   files: ProjectFile[];
