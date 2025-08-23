@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Project, ProjectFile, ProjectLink, ProjectEntry } from '../types/Project';
+import { Project, ProjectFile, ProjectLink } from '../types/Project';
 import { FileManager } from './FileManager';
 import { LinkManager } from './LinkManager';
-import { ProjectEntryForm } from './ProjectEntryForm';
-import { ProjectEntryList } from './ProjectEntryList';
 import { X, Save, FileText, Link as LinkIcon } from 'lucide-react';
 
 interface ProjectFormProps {
@@ -27,10 +25,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   const [tagInput, setTagInput] = useState('');
   const [files, setFiles] = useState<ProjectFile[]>([]);
   const [links, setLinks] = useState<ProjectLink[]>([]);
-  const [entries, setEntries] = useState<ProjectEntry[]>([]);
   const [activeTab, setActiveTab] = useState<'details' | 'files' | 'links'>('details');
-  const [showEntryForm, setShowEntryForm] = useState(false);
-  const [editingEntry, setEditingEntry] = useState<ProjectEntry | null>(null);
 
   useEffect(() => {
     if (project) {
@@ -43,7 +38,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       setTags(project.tags);
       setFiles(project.files);
       setLinks(project.links);
-      setEntries(project.entries || []);
     }
   }, [project]);
 
@@ -60,8 +54,7 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
       notes: notes.trim(),
       tags,
       files,
-      links,
-      entries
+      links
     });
   };
 
@@ -81,41 +74,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddTag();
-    }
-  };
-
-  const handleSaveEntry = (entry: Omit<ProjectEntry, 'id' | 'createdAt' | 'updatedAt'>) => {
-    let updatedEntries;
-    
-    if (editingEntry) {
-      updatedEntries = entries.map(e => 
-        e.id === editingEntry.id 
-          ? { ...entry, id: e.id, createdAt: e.createdAt, updatedAt: new Date().toISOString() }
-          : e
-      );
-    } else {
-      const newEntry: ProjectEntry = {
-        ...entry,
-        id: Date.now().toString(),
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-      updatedEntries = [...entries, newEntry];
-    }
-
-    setEntries(updatedEntries);
-    setShowEntryForm(false);
-    setEditingEntry(null);
-  };
-
-  const handleEditEntry = (entry: ProjectEntry) => {
-    setEditingEntry(entry);
-    setShowEntryForm(true);
-  };
-
-  const handleDeleteEntry = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this entry?')) {
-      setEntries(entries.filter(e => e.id !== id));
     }
   };
 
@@ -145,28 +103,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               }`}
             >
               Project Details
-            </button>
-            <button
-              onClick={() => setActiveTab('entries')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center ${
-                activeTab === 'entries'
-                  ? 'border-[#7F6353] text-[#7F6353]'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Entries ({entries.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('entries')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors flex items-center ${
-                activeTab === 'entries'
-                  ? 'border-[#7F6353] text-[#7F6353]'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <FileText className="w-4 h-4 mr-2" />
-              Entries ({entries.length})
             </button>
             <button
               onClick={() => setActiveTab('files')}
@@ -331,26 +267,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
               </div>
             )}
 
-            {activeTab === 'entries' && (
-              <div className="space-y-6">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-gray-900">Project Entries</h3>
-                  <button
-                    type="button"
-                    onClick={() => setShowEntryForm(true)}
-                    className="px-4 py-2 bg-[#7F6353] text-white rounded-lg hover:bg-[#695346] transition-colors"
-                  >
-                    Add Entry
-                  </button>
-                </div>
-                <ProjectEntryList
-                  entries={entries}
-                  onEdit={handleEditEntry}
-                  onDelete={handleDeleteEntry}
-                />
-              </div>
-            )}
-
             {activeTab === 'files' && (
               <FileManager
                 files={files}
@@ -385,17 +301,6 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
             </div>
           </div>
         </form>
-
-        {showEntryForm && (
-          <ProjectEntryForm
-            entry={editingEntry}
-            onSave={handleSaveEntry}
-            onCancel={() => {
-              setShowEntryForm(false);
-              setEditingEntry(null);
-            }}
-          />
-        )}
       </div>
     </div>
   );
